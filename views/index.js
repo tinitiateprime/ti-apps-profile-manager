@@ -161,9 +161,11 @@ function createCheckboxes(jsonData){
                 data: JSON.stringify(jsonData),
                 success: function(response) {
                     console.log('Data saved:', response);
+                    window.location.href = '/home.html';
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', error);
+                    
                 }
             });
         });

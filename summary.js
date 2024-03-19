@@ -13,6 +13,9 @@ app.use(bodyParser.json());
 app.get('/index.js', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.js'));    
 });
+app.get('/home.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'home.html'));    
+});
 
 app.get('/style.css', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'style.css'));    
