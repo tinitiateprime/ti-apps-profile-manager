@@ -1,0 +1,6 @@
+# SQL Server Deployment
+* Proficient in installing and configuring SQL Server on diverse platforms including Windows Server, Linux, and Azure environments.
+* Experienced in designing and developing databases using SQL Server Management Studio (SSMS), adept at creating and optimizing database objects such as tables, views, stored procedures, and functions.
+* Skilled in implementing high availability and disaster recovery solutions, including AlwaysOn Availability Groups, Failover Clustering, and backup strategies to ensure business continuity and data integrity.
+* Skilled in automating deployment processes and routine administrative tasks using Transact-SQL (T-SQL), PowerShell, or other scripting languages to improve efficiency and consistency in SQL Server management.
+* Effective communicator and collaborator, experienced in working with cross-functional teams to plan and execute SQL Server deployments, and proficient in documenting deployment processes, configurations, and best practices.

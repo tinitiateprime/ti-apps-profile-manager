@@ -1,0 +1,12 @@
+{
+  "files": [
+    "data\\education",
+    "data\\java",
+    "data\\postgresql",
+    "data\\projects",
+    "data\\python",
+    "data\\skill-set",
+    "data\\sqlserver",
+    "data\\summary"
+  ]
+}

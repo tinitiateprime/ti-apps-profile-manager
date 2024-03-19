@@ -1,0 +1,19 @@
+[
+  {
+    "file_name": "data\\sqlserver\\sqlserver-manager-developer.md",
+    "header": "SQL Server Manager ",
+    "items": [
+      "Proven track record of optimizing database performance and implementing innovative solutions to meet business objectives.",
+      "Excellent communication skills demonstrated through effective collaboration with stakeholders and team members.",
+      "Proven leadership qualities, having mentored junior developers and led teams in delivering successful database solutions."
+    ]
+  },
+  {
+    "file_name": "data\\sqlserver\\sqlserver-client-tools.md",
+    "header": "SQL Server Client Tools ",
+    "items": [
+      "Familiarity with SQL Server Profiler for capturing and analyzing SQL Server events, queries, and performance metrics.",
+      "Knowledgeable in performance tuning and optimization using SSMS tools like query execution plans and database engine tuning advisor."
+    ]
+  }
+]

@@ -32,11 +32,12 @@ function readDirectory(dir, fileList = []) {
     files.forEach(file => {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        if (stat.isDirectory()) {
-            readDirectory(filePath, fileList);
-        } else {
-            fileList.push(filePath);
-        }
+        fileList.push(filePath);
+        // if (stat.isDirectory()) {
+        //     readDirectory(filePath, fileList);
+        // } else {
+        //     fileList.push(filePath);
+        // }
     });
     return fileList;
 }
@@ -47,36 +48,42 @@ const directoryPath = './data';
 app.get('/jsondata', (req, res) => {
     const fileList = readDirectory(directoryPath);
 
-    const mdFiles = fileList.filter(file => path.extname(file) === '.md');
+    //const mdFiles = fileList.filter(file => path.extname(file) === '.md');
 
-    const jsonData = { files: mdFiles };
+    const jsonData = { files: fileList };
     fs.writeFileSync(path.join(__dirname,'markdown-driver.json'), JSON.stringify(jsonData, null, 2));
     res.json(jsonData);
    
 });
 
-function readMarkdownContent(filePath) {
-    return new Promise((resolve, reject) => {
-        fs.readFile(filePath, 'utf8', (err, data) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(data);
-            }
-        });
-    });
-}
-app.get('/mdcontent',(req,res)=>{
-    //console.log(req)
-readMarkdownContent(req.query.file)
-    .then(content => {
-        //console.log(content); // Handle the content as you wish
-        res.json(content)
-    })
-    .catch(error => {
-        console.error('Error reading markdown content:', error);
+app.get('/filecontent', (req, res) => {
+    const directoryPath = path.join(__dirname, req.query.file);
+    fs.readdir(directoryPath, (err, files) => {
+        if (err) {
+            console.error('Error reading directory:', err);
+            res.status(500).send('Error reading directory');
+            return;
+        }
+        res.json(files);
     });
 });
+
+app.get('/mdcontent', (req, res) => {
+   // console.log(req.query.file)
+    //const directoryPath = path.join(__dirname, req.query.file);
+    const filePath = path.join(__dirname, req.query.file);
+    const fileList = []
+    fs.readFile(filePath, 'utf8', (err, content) => {
+        if (err) {
+            console.error('Error reading file:', err);
+            res.status(500).send('Error reading file');
+            return;
+        }
+        fileList.push(content)
+        res.json(fileList);
+    });
+});
+
 
 app.post('/save', (req, res) => {
     
@@ -115,7 +122,7 @@ app.get('/load-draft', (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
