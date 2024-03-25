@@ -5,63 +5,36 @@ function createCheckboxes(jsonData){
                 
                 const ulist = document.createElement('ul');
                 let count = 1
-                jsonData.files.forEach((file) => {
-                    //debugger
-                    if(count!=1){
-                        
-                    }
-                    //debugger
-                    const list = document.createElement('li');
-                    let checkbox = document.createElement('input');
-                    ulist.className = 'list-group'
-                    list.className = 'list-group-item'
-                    list.id = 'Mlist'+count
-                    checkbox.type = 'checkbox';
-                    checkbox.name = 'file'+count;
-                    checkbox.value = file;
-                    //checkbox.onchange(changefun());
-                    list.append(checkbox)
-                    list.append(file.split('\\')[1])
-                    ulist.append(list)
-                    // checkboxContainer.appendChild(document.createTextNode(file.split('\\')[1]
-                    // ));
-                    checkboxContainer.appendChild(ulist)
-                    count++
-                    //document.getElementById("user").innerHTML = 'Welcome, '
-                    checkbox.addEventListener('change', async function() {
+                jsonData.forEach((item,index) => {
+                   //debugger
+                    
+                    var collapseItem = `
+            <div class="card">
+                <div class="card-header" id="heading${index}">
+                    <a class="card-button border-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
+                        ${item.folder.split('\\')[1]}
+                    </a>
+                </div>
+                <div id="collapse${index}" class="card-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#accordion">
+                    <div class="card-body"><ul class="list-group">`
+                    if(typeof item.contents[0] !='undefined'){
+                    item.contents[0].contents.forEach((items=>{
                         //debugger
-                        let counter = 1
-                        if (this.checked) {
-                            //debugger
-
-                        const content = await convertMarkdownToList (file);
-                        let html =''
-                        html +=`<ul class="list-group list-group-flush">`
-                            content.forEach((line)=>{
-                                //debugger
-                                html+=`<li class="list-group-item"><input type="checkbox" onchange="addmdfiles(this)" name="checkbox" value="${file}\\${line}">${line.slice(0,-3)}</li>`
-                            });
-                            html+=`</ul>`
-                            $('#'+$(this)[0].parentElement.id).append(html)
-
-                        } else {
-                            //debugger
-                           
-
-                            //mdContentContainer.innerHTML = ''; // Clear content when unchecked
-                        }
-                    });
+                        collapseItem+=`<li class="list-group-item"><input type="checkbox" onchange="addmdfiles(this)" name="checkbox" value="${item.folder}\\${items}">${items}</li>`
+                    }))
+                }
+                    collapseItem+=`</ul></div>
+                </div>
+            </div>
+        `;
+                    count++
+                    $('#checkboxList').append(collapseItem);
+                    //document.getElementById("user").innerHTML = 'Welcome, '
                 });
-             }
 
-
-         function convertMarkdownToList(list){
-                //debugger
-                return fetch('/filecontent?file=' + encodeURIComponent(list))
-             .then(response => response.json())
-             }
-
-             function fetchMarkdownContent(file) {
+            }
+            
+            function fetchMarkdownContent(file) {
                 //debugger
                  return fetch('/mdcontent?file=' + encodeURIComponent(file))
                      .then(response => response.json())
@@ -70,7 +43,7 @@ function createCheckboxes(jsonData){
              }
 
             async function addmdfiles(mdfile){
-                //debugger
+                debugger
                 let counter = 1
                 if($('.file-content').length!=0){
                     counter = $('.file-content').each(()=>{}).length +1

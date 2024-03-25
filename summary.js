@@ -11,68 +11,71 @@ app.use(express.static(path.join(__dirname, 'views')));
 
 app.use(bodyParser.json());
 app.get('/index.js', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.js'));    
+    res.sendFile(path.join(__dirname, 'scripts', 'index.js'));    
 });
 app.get('/home.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'home.html'));    
 });
 
 app.get('/style.css', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'style.css'));    
+    res.sendFile(path.join(__dirname, 'style.css'));    
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'summary.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/summary', (req, res) => {
+app.get('/index', (req, res) => {
     console.log('start')
     res.render('summary');
 });
 
-function readDirectory(dir, fileList = []) {
-    const files = fs.readdirSync(dir);  
-    files.forEach(file => {
-        const filePath = path.join(dir, file);
-        const stat = fs.statSync(filePath);
-        fileList.push(filePath);
-        // if (stat.isDirectory()) {
-        //     readDirectory(filePath, fileList);
-        // } else {
-        //     fileList.push(filePath);
-        // }
-    });
-    return fileList;
-}
+const readDirectory = (dirPath) => {
+    const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+    let structure = [];
 
+    entries.forEach(entry => {
+        const entryPath = path.join(dirPath, entry.name);
+
+        if (entry.isDirectory()) {
+            structure.push({
+                folder: entryPath,
+                contents: readDirectory(entryPath)
+            });
+        } else {
+            const fileObject = structure.find(item => item.folder === 'files');
+            if (!fileObject) {
+                structure.push({
+                    folder: 'files',
+                    contents: [entry.name]
+                });
+            } else {
+                fileObject.contents.push(entry.name);
+            }
+        }
+    });
+
+    return structure;
+};
 
 const directoryPath = './data';
+
 
 app.get('/jsondata', (req, res) => {
     const fileList = readDirectory(directoryPath);
 
     //const mdFiles = fileList.filter(file => path.extname(file) === '.md');
 
-    const jsonData = { files: fileList };
+    const jsonData = fileList;
     fs.writeFileSync(path.join(__dirname,'markdown-driver.json'), JSON.stringify(jsonData, null, 2));
     res.json(jsonData);
    
 });
 
-app.get('/filecontent', (req, res) => {
-    const directoryPath = path.join(__dirname, req.query.file);
-    fs.readdir(directoryPath, (err, files) => {
-        if (err) {
-            console.error('Error reading directory:', err);
-            res.status(500).send('Error reading directory');
-            return;
-        }
-        res.json(files);
-    });
-});
+
 
 app.get('/mdcontent', (req, res) => {
-   // console.log(req.query.file)
+   //console.log(req.query.file)
     //const directoryPath = path.join(__dirname, req.query.file);
     const filePath = path.join(__dirname, req.query.file);
     const fileList = []
