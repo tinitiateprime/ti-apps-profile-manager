@@ -1,4 +1,3 @@
-const checkboxContainer = document.getElementById('checkboxList');
 const mdContentContainer = document.getElementById('md-content-container');
 function createCheckboxes(jsonData){
                 //debugger
